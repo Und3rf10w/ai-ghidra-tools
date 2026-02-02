@@ -1,0 +1,6 @@
+{
+  "enabledMcpjsonServers": [
+    "ghidra-mcp"
+  ],
+  "enableAllProjectMcpServers": true
+}

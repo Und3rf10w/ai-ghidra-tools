@@ -1,0 +1,10 @@
+{
+  "name": "ghidra",
+  "version": "1.0.0",
+  "description": "Ghidra reverse engineering integration for Claude Code - analyze binaries, decompile functions, find strings, and trace cross-references",
+  "author": {
+    "name": "Und3rf10w",
+    "email": "noemail@example.com"
+  },
+  "keywords": ["ghidra", "reverse-engineering", "decompiler", "binary-analysis", "disassembler"]
+}

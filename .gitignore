@@ -1,0 +1,307 @@
+# =============================================================================
+# Ghidra Claude Plugin - .gitignore
+# =============================================================================
+
+# =============================================================================
+# Python
+# =============================================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.env/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+pytestdebug.log
+
+# Translations
+*.mo
+*.pot
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# Cython debug symbols
+cython_debug/
+
+# Type checker cache
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+.pyre/
+
+# =============================================================================
+# Ghidra
+# =============================================================================
+
+# Ghidra workspace and projects (contains analyzed binaries)
+ghidra-workspace/
+*.gpr
+*.rep/
+*.lock
+
+# Ghidra logs and temp files
+*.log
+ghidra_scripts/*.class
+
+# Ghidra server files
+server.conf
+svrAdmin.log
+server.log
+
+# =============================================================================
+# IDEs and Editors
+# =============================================================================
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs (PyCharm, IntelliJ)
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+.metadata/
+bin/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*.swn
+*~
+.vim/
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Atom
+.atom/
+
+# =============================================================================
+# Operating Systems
+# =============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# =============================================================================
+# Claude Code Plugin
+# =============================================================================
+
+# Local settings (user-specific)
+.claude/settings.local.json
+*.local.md
+*.local.json
+
+# Plugin cache
+.plugin-cache/
+
+# =============================================================================
+# Testing
+# =============================================================================
+
+# Test binaries (don't commit test samples)
+tests/samples/
+tests/binaries/
+*.exe
+*.dll
+*.elf
+*.bin
+*.o
+*.a
+
+# Test output
+test-results/
+test-output/
+junit.xml
+
+# =============================================================================
+# Build and Release
+# =============================================================================
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# Release builds
+release/
+releases/
+
+# =============================================================================
+# Secrets and Credentials
+# =============================================================================
+
+# Environment files with secrets
+.env
+.env.local
+.env.*.local
+*.env
+
+# API keys and credentials
+secrets.json
+credentials.json
+*.pem
+*.key
+*.crt
+
+# =============================================================================
+# Logs and Databases
+# =============================================================================
+
+# Log files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# =============================================================================
+# Misc
+# =============================================================================
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Lock files (except package locks)
+*.lock
+!package-lock.json
+!poetry.lock
+!Pipfile.lock
+
+# Documentation builds
+docs/_build/
+site/
+
+# Node (if using any JS tools)
+node_modules/

@@ -1,0 +1,19 @@
+{
+  "name": "ghidra-tools",
+  "owner": {
+    "name": "Und3rf10w",
+    "email": "noemail@example.com"
+  },
+  "metadata": {
+    "description": "Ghidra reverse engineering tools for Claude Code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "ghidra",
+      "version": "1.0.0",
+      "source": "./plugins/ghidra",
+      "description": "Ghidra reverse engineering integration - analyze binaries, decompile functions, find strings, trace cross-references"
+    }
+  ]
+}
