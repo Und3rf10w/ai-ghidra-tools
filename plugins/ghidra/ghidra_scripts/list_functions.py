@@ -22,29 +22,14 @@ def run():
             })
             return
 
-        # Get arguments: [filter_pattern, limit, offset]
+        # Get filter pattern from script args
         args = getScriptArgs()
-        filter_pattern = None
-        limit = 100  # Default limit to prevent massive responses
-        offset = 0
-
-        if args:
-            # First arg can be filter pattern or "limit:N" or "offset:N"
-            for arg in args:
-                if arg.startswith("limit:"):
-                    limit = int(arg.split(":")[1])
-                elif arg.startswith("offset:"):
-                    offset = int(arg.split(":")[1])
-                elif arg != "":
-                    filter_pattern = arg
-
+        filter_pattern = args[0] if args else None
         filter_regex = re.compile(filter_pattern) if filter_pattern else None
 
         # Collect functions
         fm = program.getFunctionManager()
         functions = []
-        total_count = 0
-        skipped = 0
 
         for func in fm.getFunctions(True):  # True = forward order
             name = func.getName()
@@ -52,17 +37,6 @@ def run():
             # Apply filter if specified
             if filter_regex and not filter_regex.search(name):
                 continue
-
-            total_count += 1
-
-            # Handle offset
-            if skipped < offset:
-                skipped += 1
-                continue
-
-            # Handle limit
-            if len(functions) >= limit:
-                continue  # Keep counting total but don't add more
 
             func_info = {
                 "name": name,
@@ -88,11 +62,7 @@ def run():
 
         output_json({
             "status": "success",
-            "total_count": total_count,
-            "returned_count": len(functions),
-            "offset": offset,
-            "limit": limit,
-            "has_more": total_count > offset + len(functions),
+            "function_count": len(functions),
             "functions": functions
         })
 

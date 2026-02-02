@@ -2,10 +2,10 @@
   "mcpServers": {
     "ghidra-mcp": {
       "command": "python3",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/servers/ghidra-mcp/server.py"],
+      "args": ["servers/ghidra-mcp/server.py"],
       "env": {
-        "GHIDRA_INSTALL": "${GHIDRA_INSTALL}",
-        "GHIDRA_WORKSPACE": "${HOME}/.claude/ghidra-workspace"
+        "GHIDRA_INSTALL": "/Users/jechavarria/work/reverse/ghidra_12.0.2_PUBLIC",
+        "GHIDRA_WORKSPACE": "/Users/jechavarria/.claude/ghidra-workspace"
       }
     }
   }

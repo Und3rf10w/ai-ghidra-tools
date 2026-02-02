@@ -57,11 +57,9 @@ def run():
             # Also check for imported symbols from symbol table
             external_manager = program.getExternalManager()
             for lib_name in external_manager.getExternalLibraryNames():
-                # Use getExternalLocations(libraryName) on the manager, not the library
-                ext_loc_iter = external_manager.getExternalLocations(lib_name)
-                if ext_loc_iter:
-                    while ext_loc_iter.hasNext():
-                        ext_loc = ext_loc_iter.next()
+                ext_lib = external_manager.getExternalLibrary(lib_name)
+                if ext_lib:
+                    for ext_loc in ext_lib.getExternalLocations():
                         # Skip if already captured as function
                         existing = [i for i in imports if i.get("name") == ext_loc.getLabel()]
                         if not existing:

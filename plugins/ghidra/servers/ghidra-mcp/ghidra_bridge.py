@@ -258,8 +258,7 @@ class GhidraBridge:
         program_name: str,
         script_name: str,
         script_args: Optional[List[str]] = None,
-        timeout: int = 300,
-        read_only: bool = True
+        timeout: int = 300
     ) -> Dict[str, Any]:
         """
         Execute a Ghidra script on an existing program.
@@ -270,7 +269,6 @@ class GhidraBridge:
             script_name: Name of the script file to execute.
             script_args: Arguments to pass to the script.
             timeout: Maximum execution time in seconds.
-            read_only: Whether to open program in read-only mode (default True).
 
         Returns:
             Parsed JSON output from the script.
@@ -281,16 +279,12 @@ class GhidraBridge:
             "-process", program_name,
             "-scriptPath", str(self.script_dir),
             "-postScript", script_name,
+            "-noanalysis",
+            "-readOnly"
         ]
 
-        # Script args must immediately follow the script name
         if script_args:
             args.extend(script_args)
-
-        # These flags come after script and its arguments
-        args.append("-noanalysis")
-        if read_only:
-            args.append("-readOnly")
 
         result = self._run_headless(project_dir, project_name, args, timeout=timeout)
 
@@ -314,28 +308,20 @@ class GhidraBridge:
         self,
         project_name: str,
         program_name: str,
-        filter_pattern: Optional[str] = None,
-        limit: int = 100,
-        offset: int = 0
+        filter_pattern: Optional[str] = None
     ) -> Dict[str, Any]:
         """
-        List functions in a program with pagination.
+        List all functions in a program.
 
         Args:
             project_name: Name of the Ghidra project.
             program_name: Name of the program.
             filter_pattern: Optional regex pattern to filter function names.
-            limit: Maximum number of functions to return (default 100).
-            offset: Number of functions to skip (for pagination).
 
         Returns:
             Dict with list of functions (name, address, size, signature).
         """
-        args = []
-        if filter_pattern:
-            args.append(filter_pattern)
-        args.append(f"limit:{limit}")
-        args.append(f"offset:{offset}")
+        args = [filter_pattern] if filter_pattern else []
         return self.execute_script(project_name, program_name, "list_functions.py", args)
 
     def decompile_function(
@@ -425,308 +411,4 @@ class GhidraBridge:
         """
         return self.execute_script(
             project_name, program_name, "get_symbols.py", [symbol_type]
-        )
-
-    def get_disassembly(
-        self,
-        project_name: str,
-        program_name: str,
-        identifier: str,
-        end_address: Optional[str] = None,
-        max_instructions: int = 500
-    ) -> Dict[str, Any]:
-        """
-        Get disassembly listing for a function or address range.
-
-        Args:
-            project_name: Name of the Ghidra project.
-            program_name: Name of the program.
-            identifier: Function name or start address.
-            end_address: Optional end address for range disassembly.
-            max_instructions: Maximum number of instructions to return.
-
-        Returns:
-            Dict with disassembly listing.
-        """
-        args = [identifier, str(max_instructions)]
-        if end_address:
-            args.append(end_address)
-        return self.execute_script(
-            project_name, program_name, "get_disassembly.py", args
-        )
-
-    def get_memory_map(
-        self,
-        project_name: str,
-        program_name: str
-    ) -> Dict[str, Any]:
-        """
-        Get memory map showing all memory regions.
-
-        Args:
-            project_name: Name of the Ghidra project.
-            program_name: Name of the program.
-
-        Returns:
-            Dict with memory regions (name, start, end, permissions).
-        """
-        return self.execute_script(
-            project_name, program_name, "get_memory_map.py"
-        )
-
-    def search_bytes(
-        self,
-        project_name: str,
-        program_name: str,
-        pattern: str,
-        max_results: int = 100,
-        start_address: Optional[str] = None,
-        end_address: Optional[str] = None
-    ) -> Dict[str, Any]:
-        """
-        Search for byte patterns in memory.
-
-        Args:
-            project_name: Name of the Ghidra project.
-            program_name: Name of the program.
-            pattern: Hex pattern to search (e.g., "4883EC20" or "48 83 ec 20").
-            max_results: Maximum number of results to return.
-            start_address: Optional start address for search range.
-            end_address: Optional end address for search range.
-
-        Returns:
-            Dict with list of matching addresses and context.
-        """
-        args = [pattern, str(max_results)]
-        if start_address:
-            args.append(start_address)
-        if end_address:
-            args.append(end_address)
-        return self.execute_script(
-            project_name, program_name, "search_bytes.py", args
-        )
-
-    def rename_symbol(
-        self,
-        project_name: str,
-        program_name: str,
-        identifier: str,
-        new_name: str
-    ) -> Dict[str, Any]:
-        """
-        Rename a function or symbol.
-
-        Args:
-            project_name: Name of the Ghidra project.
-            program_name: Name of the program.
-            identifier: Current function name or address.
-            new_name: New name for the symbol.
-
-        Returns:
-            Dict with status of rename operation.
-        """
-        return self.execute_script(
-            project_name, program_name, "rename_symbol.py",
-            [identifier, new_name],
-            read_only=False
-        )
-
-    def add_comment(
-        self,
-        project_name: str,
-        program_name: str,
-        address: str,
-        comment: str,
-        comment_type: str = "eol"
-    ) -> Dict[str, Any]:
-        """
-        Add a comment at an address.
-
-        Args:
-            project_name: Name of the Ghidra project.
-            program_name: Name of the program.
-            address: Address to add comment at.
-            comment: Comment text.
-            comment_type: Type of comment ("eol", "pre", "post", "plate", "repeatable").
-
-        Returns:
-            Dict with status of comment addition.
-        """
-        return self.execute_script(
-            project_name, program_name, "add_comment.py",
-            [address, comment, comment_type],
-            read_only=False
-        )
-
-    def get_basic_blocks(
-        self,
-        project_name: str,
-        program_name: str,
-        function: str
-    ) -> Dict[str, Any]:
-        """
-        Get basic blocks of a function.
-
-        Args:
-            project_name: Name of the Ghidra project.
-            program_name: Name of the program.
-            function: Function name or address.
-
-        Returns:
-            Dict with basic blocks and their control flow.
-        """
-        return self.execute_script(
-            project_name, program_name, "get_basic_blocks.py", [function]
-        )
-
-    def get_data_at_address(
-        self,
-        project_name: str,
-        program_name: str,
-        address: str,
-        length_or_type: str = "32",
-        format_type: str = "hex"
-    ) -> Dict[str, Any]:
-        """
-        Read data at a specific address.
-
-        Args:
-            project_name: Name of the Ghidra project.
-            program_name: Name of the program.
-            address: Address to read from.
-            length_or_type: Number of bytes or data type (e.g., "32", "qword", "string").
-            format_type: Output format ("hex", "decimal", "binary", "ascii").
-
-        Returns:
-            Dict with data and interpretation.
-        """
-        return self.execute_script(
-            project_name, program_name, "get_data_at_address.py",
-            [address, length_or_type, format_type]
-        )
-
-    def list_classes(
-        self,
-        project_name: str,
-        program_name: str,
-        filter_pattern: Optional[str] = None
-    ) -> Dict[str, Any]:
-        """
-        List classes and namespaces in the program.
-
-        Args:
-            project_name: Name of the Ghidra project.
-            program_name: Name of the program.
-            filter_pattern: Optional regex pattern to filter class names.
-
-        Returns:
-            Dict with list of classes and their methods.
-        """
-        args = []
-        if filter_pattern:
-            args.append(filter_pattern)
-        return self.execute_script(
-            project_name, program_name, "list_classes.py", args
-        )
-
-    def set_function_signature(
-        self,
-        project_name: str,
-        program_name: str,
-        function: str,
-        signature: str
-    ) -> Dict[str, Any]:
-        """
-        Set or update function signature.
-
-        Args:
-            project_name: Name of the Ghidra project.
-            program_name: Name of the program.
-            function: Function name or address.
-            signature: Function signature (e.g., "int func(char* arg1, int arg2)").
-
-        Returns:
-            Dict with status of signature update.
-        """
-        return self.execute_script(
-            project_name, program_name, "set_function_signature.py",
-            [function, signature],
-            read_only=False
-        )
-
-    def get_call_graph(
-        self,
-        project_name: str,
-        program_name: str,
-        function: str,
-        depth: int = 2
-    ) -> Dict[str, Any]:
-        """
-        Get call graph showing functions called by and calling this function.
-
-        Args:
-            project_name: Name of the Ghidra project.
-            program_name: Name of the program.
-            function: Function name or address.
-            depth: Depth of call graph traversal (default 2).
-
-        Returns:
-            Dict with call graph data.
-        """
-        return self.execute_script(
-            project_name, program_name, "get_call_graph.py",
-            [function, str(depth)]
-        )
-
-    def emulate_function(
-        self,
-        project_name: str,
-        program_name: str,
-        function: str,
-        registers: Optional[str] = None,
-        memory: Optional[str] = None,
-        max_steps: int = 1000
-    ) -> Dict[str, Any]:
-        """
-        Emulate function execution with P-code emulator.
-
-        Args:
-            project_name: Name of the Ghidra project.
-            program_name: Name of the program.
-            function: Function name or address.
-            registers: JSON string of initial register values.
-            memory: JSON string of initial memory values.
-            max_steps: Maximum number of emulation steps.
-
-        Returns:
-            Dict with emulation results (register state, memory, return value).
-        """
-        args = [function, registers or "{}", memory or "{}", str(max_steps)]
-        return self.execute_script(
-            project_name, program_name, "emulate_function.py", args
-        )
-
-    def patch_bytes(
-        self,
-        project_name: str,
-        program_name: str,
-        address: str,
-        hex_bytes: str
-    ) -> Dict[str, Any]:
-        """
-        Patch bytes at a specific address.
-
-        Args:
-            project_name: Name of the Ghidra project.
-            program_name: Name of the program.
-            address: Address to patch.
-            hex_bytes: Hex bytes to write (e.g., "4883EC20" or "48 83 ec 20").
-
-        Returns:
-            Dict with status of patch operation.
-        """
-        return self.execute_script(
-            project_name, program_name, "patch_bytes.py",
-            [address, hex_bytes],
-            read_only=False
         )
