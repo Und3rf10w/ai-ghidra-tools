@@ -298,6 +298,8 @@ temp/
 !package-lock.json
 !poetry.lock
 !Pipfile.lock
+!Cargo.lock
+!yarn.lock
 
 # Documentation builds
 docs/_build/

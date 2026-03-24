@@ -1,6 +1,6 @@
 {
   "name": "ghidra",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Ghidra reverse engineering integration for Claude Code - analyze binaries, decompile functions, find strings, and trace cross-references",
   "author": {
     "name": "Claude Code Plugin"
